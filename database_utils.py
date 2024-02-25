@@ -1,6 +1,9 @@
 import yaml
 from sqlalchemy import create_engine
 import pandas as pd
+from sqlalchemy import inspect
+from sqlachemy import text
+
 
 class DatabaseConnector:
     def read_db_creds(self):
@@ -16,9 +19,20 @@ class DatabaseConnector:
         RDS_DATABASE = 'postgres'
         RDS_PORT = 5432
         engine = create_engine(f"postgresql://{self.read_db_creds()['RDS_USER']}:{self.read_db_creds()['RDS_PASSWORD']}@{self.read_db_creds()['RDS_HOST']}:{self.read_db_creds()['RDS_PORT']}/{self.read_db_creds()['RDS_DATABASE']}")
+        return engine
         
     def list_db_tables(self):
-        
+        inspector = inspect(engine) 
+        db_tables = inspector.get_table_names()
+        return db_tables
+    
+    def reads_rds_table(self, table_name):
+        with engine.execution_options(isolation_level='AUTOCOMMIT').connect() as conn:
+            with engine.connect() as connection:
+                result = connection.execute(text("SELECT * FROM table_name"))
+                for row in result:
+                    print(row)
+        pd.read_sql("SELECT * FROM table_name", engine)
         
 RDS_CONNECTOR = DatabaseConnector()
 
