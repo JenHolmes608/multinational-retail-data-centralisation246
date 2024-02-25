@@ -6,11 +6,8 @@ from sqlachemy import text
 
 
 class DatabaseConnector:
-    def __init__(self, db_creds, engine, inspector, db_tables):
-        self.db_creds = db_creds
-        self.engine = engine
-        self.inspector = inspector
-        self.db_tables = db_tables
+    def __init__(self, yaml_file_path = 'db_creds.yaml'):
+        self.engine = init_db_engine
 
     def read_db_creds(self):
         with open('db_creds.yaml', 'r') as file:
