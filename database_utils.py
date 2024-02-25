@@ -6,6 +6,12 @@ from sqlachemy import text
 
 
 class DatabaseConnector:
+    def __init__(self, db_creds, engine, inspector, db_tables):
+        self.db_creds = db_creds
+        self.engine = engine
+        self.inspector = inspector
+        self.db_tables = db_tables
+
     def read_db_creds(self):
         with open('db_creds.yaml', 'r') as file:
             db_creds = yaml.safe_load(file)
@@ -26,14 +32,6 @@ class DatabaseConnector:
         db_tables = inspector.get_table_names()
         return db_tables
     
-    def reads_rds_table(self, table_name):
-        with engine.execution_options(isolation_level='AUTOCOMMIT').connect() as conn:
-            with engine.connect() as connection:
-                result = connection.execute(text("SELECT * FROM table_name"))
-                for row in result:
-                    print(row)
-        pd.read_sql("SELECT * FROM table_name", engine)
-        
 RDS_CONNECTOR = DatabaseConnector()
 
 RDS_CONNECTOR.read_db_creds()
