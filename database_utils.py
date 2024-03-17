@@ -7,7 +7,7 @@ from sqlachemy import text
 
 class DatabaseConnector:
     def __init__(self, yaml_file_path = 'db_creds.yaml'):
-        self.engine = init_db_engine
+        self.engine = self.init_db_engine()
 
     def read_db_creds(self):
         with open('db_creds.yaml', 'r') as file:
@@ -16,16 +16,12 @@ class DatabaseConnector:
             return db_creds
 
     def init_db_engine(self):
-        RDS_HOST = 'data-handling-project-readonly.cq2e8zno855e.eu-west-1.rds.amazonaws.com'
-        RDS_PASSWORD = 'AiCore2022'
-        RDS_USER = 'aicore_admin'
-        RDS_DATABASE = 'postgres'
-        RDS_PORT = 5432
         engine = create_engine(f"postgresql://{self.read_db_creds()['RDS_USER']}:{self.read_db_creds()['RDS_PASSWORD']}@{self.read_db_creds()['RDS_HOST']}:{self.read_db_creds()['RDS_PORT']}/{self.read_db_creds()['RDS_DATABASE']}")
+        engine.execution_options(isolation_level = 'AUTOCOMMIT').connect()
         return engine
         
     def list_db_tables(self):
-        inspector = inspect(engine) 
+        inspector = inspect(self.engine) 
         db_tables = inspector.get_table_names()
         return db_tables
     
