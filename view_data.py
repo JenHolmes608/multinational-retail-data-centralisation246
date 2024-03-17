@@ -27,7 +27,21 @@ class DatabaseConnector:
     
 RDS_CONNECTOR = DatabaseConnector()
 
-RDS_CONNECTOR.read_db_creds()
+
+RDS_CONNECTOR.init_db_engine()
 
 
+class DataExtractor:
+    def __init__(self, engine):
+        self.engine = engine
+        
+    def reads_rds_table(self, table_name):
+        data = pd.read_sql_table(table_name, self.engine)
+        df = pd.DataFrame(data)
+        return df
+        
+Display_Data = DataExtractor(DatabaseConnector.engine)
 
+df = Display_Data.reads_rds_table()
+
+df.head()
