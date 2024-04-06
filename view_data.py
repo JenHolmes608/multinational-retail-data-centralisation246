@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 from sqlalchemy import inspect
 from sqlalchemy import text
+from pandasgui import show
 
 
 class DatabaseConnector:
@@ -12,7 +13,6 @@ class DatabaseConnector:
     def read_db_creds(self):
         with open('db_creds.yaml', 'r') as file:
             db_creds = yaml.safe_load(file)
-            print(db_creds)
             return db_creds
 
     def init_db_engine(self):
@@ -25,11 +25,6 @@ class DatabaseConnector:
         db_tables = inspector.get_table_names()
         return db_tables
     
-RDS_CONNECTOR = DatabaseConnector()
-
-
-RDS_CONNECTOR.init_db_engine()
-
 
 class DataExtractor:
     def __init__(self, engine):
@@ -39,9 +34,18 @@ class DataExtractor:
         data = pd.read_sql_table(table_name, self.engine)
         df = pd.DataFrame(data)
         return df
-        
-Display_Data = DataExtractor(DatabaseConnector.engine)
 
-df = Display_Data.reads_rds_table()
 
-df.head()
+RDS_CONNECTOR = DatabaseConnector()
+
+RDS_CONNECTOR.init_db_engine()
+       
+Display_Data = DataExtractor(RDS_CONNECTOR.engine)
+
+df = Display_Data.reads_rds_table("legacy_store_details")
+
+table_names = RDS_CONNECTOR.list_db_tables()
+
+print(table_names)
+
+print(df)

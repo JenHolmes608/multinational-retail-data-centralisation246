@@ -12,7 +12,6 @@ class DatabaseConnector:
     def read_db_creds(self):
         with open('db_creds.yaml', 'r') as file:
             db_creds = yaml.safe_load(file)
-            print(db_creds)
             return db_creds
 
     def init_db_engine(self):
@@ -27,7 +26,6 @@ class DatabaseConnector:
     
 RDS_CONNECTOR = DatabaseConnector()
 
-RDS_CONNECTOR.read_db_creds()
 
 
 
