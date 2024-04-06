@@ -49,3 +49,5 @@ table_names = RDS_CONNECTOR.list_db_tables()
 print(table_names)
 
 print(df)
+
+print(df.to_markdown())

@@ -71,3 +71,18 @@ class DataCleaning:
         self.df['card_number'] = np.where(valid_card_numbers, self.df['card_number'].astype(str), np.nan)
 
         return self.df
+    
+    def clean_card_data(self):
+        self.df = self.df.replace('NULL', np.nan)
+        self.df = self.df.replace('N/A', np.nan)
+
+        self.df['date_payment_confirmed'] = pd.to_datetime(self.df['date_payment_confirmed'], errors='coerce', utc=False, format='mixed').dt.date
+
+        self.df.dropna(axis=0, how='all', subset=self.df.columns[1:], inplace=True)
+        self.df = self.df.dropna(axis=1, how='all')
+        self.df = self.df.replace('NaT', np.nan)
+        self.df = self.df.dropna(subset=['date_payment_confirmed'])
+
+        self.df.drop_duplicates(inplace=True)
+
+        return self.df
