@@ -24,6 +24,9 @@ class DatabaseConnector:
         db_tables = inspector.get_table_names()
         return db_tables
     
+    def upload_to_db(self, df, table_name):
+        df.to_sql(table_name, con=self.engine, if_exists='replace', index=False)
+    
 RDS_CONNECTOR = DatabaseConnector()
 
 
