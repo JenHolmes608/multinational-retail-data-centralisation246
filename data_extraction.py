@@ -1,6 +1,13 @@
+import yaml
+from sqlalchemy import create_engine
 import pandas as pd
+from sqlalchemy import inspect
+from sqlalchemy import text
+from pandasgui import show
+import numpy as np 
 import tabula
 import requests
+import boto3
 
 class DataExtractor:
     def __init__(self, engine):
@@ -20,18 +27,27 @@ class DataExtractor:
        
     def list_number_of_stores(self, number_of_stores_endpoint):
         response = requests.get(number_of_stores_endpoint, headers=self.header_dictionary)
-        number_of_stores = response.json()['number_of_stores']
+        print(response.json())
+        number_of_stores = response.json()['number_stores']
         return number_of_stores
     
     def retrieve_stores_data(self, retrieve_store_endpoint, number_of_stores):
         store_data_list = []
-        for store_number in range(1, number_of_stores + 1):
+        for store_number in range(0, number_of_stores):
             endpoint_url = f"{self.base_url}{retrieve_store_endpoint}/{store_number}"
             response = requests.get(endpoint_url, headers=self.header_dictionary)
+            store_data_list.append(response.json())
         
         store_df = pd.DataFrame(store_data_list)
         return store_df
     
-pdf_url = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
-number_of_stores_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores'
-retrieve_store_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details/{store_number}'
+    def extract_from_s3(self, s3_address):
+        s3 = boto3.client('s3')
+        bucket, key = s3_address.split('//')[1].split('/', 1)
+        s3.download_file(bucket, key, 'products.csv')
+        df = pd.read_csv('products.csv')
+        return df
+    
+    def extract_date_events_data(self, date_events_url):
+        df = pd.read_json(date_events_url)
+        return df
