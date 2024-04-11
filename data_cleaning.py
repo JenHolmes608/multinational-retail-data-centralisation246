@@ -1,19 +1,41 @@
+import os
+os.environ['JAVA_HOME'] = r'C:\Program Files\Java\jdk-22'
 import yaml
+
+from pandasgui import show
 from sqlalchemy import create_engine
-import pandas as pd
 from sqlalchemy import inspect
 from sqlalchemy import text
-from pandasgui import show
-import numpy as np 
-import tabula
-import requests
+
 import boto3
+import numpy as np 
+import pandas as pd
+import requests
+import tabula
+import yaml
 
 class DataCleaning:
     def __init__(self, df):
+        '''
+        Initialize the DataCleaning object with the provided DataFrame.
+
+        Parameters:
+        - df (DataFrame): The pandas DataFrame containing the data to be cleaned.
+
+        This method initializes the DataCleaning object with the provided DataFrame.
+        '''
         self.df = df
 
     def clean_user_data(self):
+        '''
+        Clean and preprocess user data.
+
+        Returns:
+        - df (DataFrame): A pandas DataFrame containing the cleaned user data.
+
+        This method performs cleaning and preprocessing tasks specific to user data.
+        '''
+        
         self.clean_legacy_users()
         self.clean_orders_table()
         self.clean_card_data()
@@ -24,6 +46,15 @@ class DataCleaning:
         
 
     def clean_legacy_users(self):
+        '''
+        Clean and preprocess user data.
+
+        Returns:
+        - df (DataFrame): A pandas DataFrame containing the cleaned user data.
+
+        This method performs cleaning and preprocessing tasks specific to user data.
+        '''
+        
         self.df = self.df.replace('NULL', np.nan)
         self.df = self.df.replace('N/A', np.nan)
         self.df.drop(self.df.columns[0], axis=1, inplace=True)
@@ -49,7 +80,14 @@ class DataCleaning:
         return self.df
     
     def clean_orders_data(self):
+        '''
+        Clean and preprocess orders data.
 
+        Returns:
+        - df (DataFrame): A pandas DataFrame containing the cleaned orders data.
+
+        This method performs cleaning and preprocessing tasks specific to orders data.
+        '''
         self.df.drop(columns=['first_name', 'last_name', '1'], inplace=True)
 
         self.df = self.df.replace('NULL', np.nan)
@@ -65,6 +103,14 @@ class DataCleaning:
         return self.df
     
     def clean_card_data(self):
+        '''
+        Clean and preprocess card data.
+
+        Returns:
+        - df (DataFrame): A pandas DataFrame containing the cleaned card data.
+
+        This method performs cleaning and preprocessing tasks specific to card data.
+        '''
         self.df = self.df.replace('NULL', np.nan)
         self.df = self.df.replace('N/A', np.nan)
 
@@ -80,6 +126,14 @@ class DataCleaning:
         return self.df
     
     def clean_store_data(self):
+        '''
+        Clean and preprocess store data.
+
+        Returns:
+        - df (DataFrame): A pandas DataFrame containing the cleaned store data.
+
+        This method performs cleaning and preprocessing tasks specific to store data.
+        '''
         self.df['lat'] = np.nan
         self.df = self.df.replace('NULL', np.nan)
         self.df = self.df.replace('N/A', np.nan)
@@ -100,6 +154,14 @@ class DataCleaning:
     
    
     def convert_product_weights(self):
+        '''
+        Convert product weights to kilograms.
+
+        Returns:
+        - df (DataFrame): A pandas DataFrame containing the converted product weights.
+
+        This method converts product weights from various units to kilograms.
+        '''
         def clean_and_convert(weight_str):
             weight_str = str(weight_str)
             weight_str = weight_str.replace('g', '').replace('ml', '').replace(' ', '').replace('k', '').replace('oz', '')
@@ -122,6 +184,14 @@ class DataCleaning:
         return self.df
     
     def clean_products_data(self):
+        '''
+        Clean and preprocess products data.
+
+        Returns:
+        - df (DataFrame): A pandas DataFrame containing the cleaned products data.
+
+        This method performs cleaning and preprocessing tasks specific to products data.
+        '''
         self.df = self.df.replace('NULL', np.nan)
         self.df = self.df.replace('N/A', np.nan)
         self.df.drop(self.df.columns[0], axis=1, inplace=True)
@@ -136,6 +206,14 @@ class DataCleaning:
         return self.df
     
     def clean_date_events_data(self):
+        '''
+        Clean and preprocess date events data.
+
+        Returns:
+        - df (DataFrame): A pandas DataFrame containing the cleaned date events data.
+
+        This method performs cleaning and preprocessing tasks specific to date events data.
+        '''
         self.df = self.df.replace('NULL', np.nan)
         self.df = self.df.replace('N/A', np.nan)
 
