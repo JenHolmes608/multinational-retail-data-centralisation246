@@ -101,7 +101,8 @@ class DataCleaning:
    
     def convert_product_weights(self):
         def clean_and_convert(weight_str):
-            weight_str = weight_str.replace('g', '').replace('ml', '').replace(' ', '')
+            weight_str = str(weight_str)
+            weight_str = weight_str.replace('g', '').replace('ml', '').replace(' ', '').replace('k', '').replace('oz', '')
             parts = weight_str.split('x')
             total_weight = 0
 

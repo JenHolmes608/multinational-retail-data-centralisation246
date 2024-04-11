@@ -1,5 +1,5 @@
 import yaml
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 import pandas as pd
 from sqlalchemy import inspect
 from sqlalchemy import text
@@ -12,16 +12,19 @@ import boto3
 
 class DatabaseConnector:
     def __init__(self, yaml_file_path):
+        self.yaml_file_path = yaml_file_path
         self.engine = self.init_db_engine()
+        self.db_creds = self.read_db_creds()
 
     def read_db_creds(self):
-        with open('db_creds.yaml', 'r') as file:
+        with open(self.yaml_file_path, 'r') as file:
             db_creds = yaml.safe_load(file)
             return db_creds
 
     def init_db_engine(self):
-        engine = create_engine(f"postgresql://{self.read_db_creds()['USER']}:{self.read_db_creds()['PASSWORD']}@{self.read_db_creds()['HOST']}:{self.read_db_creds()['PORT']}/{self.read_db_creds()['DATABASE']}")
-        engine.execution_options(isolation_level = 'AUTOCOMMIT').connect()
+        db_creds = self.read_db_creds()
+        engine = create_engine(f"postgresql://{db_creds['USER']}:{db_creds['PASSWORD']}@{db_creds['HOST']}:{db_creds['PORT']}/{db_creds['DATABASE']}")
+        engine.execution_options(isolation_level='AUTOCOMMIT').connect()
         return engine
     
     def list_db_tables(self):
