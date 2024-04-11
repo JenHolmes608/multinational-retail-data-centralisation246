@@ -139,11 +139,10 @@ class DataCleaning:
         self.df = self.df.replace('NULL', np.nan)
         self.df = self.df.replace('N/A', np.nan)
 
-        self.df['timestamp'] = pd.to_datetime(self.df['timestamp'], format='%H:%M', errors='coerce').dt.strftime('%H:%M:%S')
+        self.df['day'] = self.df['day'].mask(pd.to_numeric(self.df['day'], errors='coerce').isna())
 
         self.df.dropna(axis=0, how='all', subset=self.df.columns[1:], inplace=True)
         self.df = self.df.dropna(axis=1, how='all')
-        self.df = self.df.replace('NaT', np.nan)
-        self.df = self.df.dropna(subset=['timestamp'])
+        self.df = self.df.dropna(subset=['day'])
         
         return self.df
