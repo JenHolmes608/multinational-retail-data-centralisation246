@@ -123,6 +123,9 @@ class DataCleaning:
 
         self.df.drop_duplicates(inplace=True)
 
+        valid_card_numbers = self.df['card_number'].astype(str).apply(len).between(11, 19)
+        self.df['card_number'] = np.where(valid_card_numbers, self.df['card_number'].astype(str), np.nan)
+
         return self.df
     
     def clean_store_data(self):
