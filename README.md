@@ -1,25 +1,46 @@
-# multinational-retail-data-centralisation246
+#Multinational Retail Data Centralisation
 
-Scenario: You work for a multinational company that sells various goods across the globe.
+Overview
+In today's globalized retail landscape, managing sales data efficiently is critical for informed decision-making. The Multinational Retail Data Centralisation project aims to address the challenge of disparate data sources by centralizing sales data into a single, accessible location. This repository contains tools and scripts to extract, clean, and centralize sales data from various sources into a centralized database, enabling streamlined analysis and reporting.
 
-Currently, their sales data is spread across many different data sources making it not easily accessible or analysable by current members of the team.
+Key Components
+1. Database Connector
+The data_utils.py file provides the DatabaseConnector class, facilitating connections to both the source and local databases. This class enables seamless extraction and transfer of data from source to destination.
 
-In an effort to become more data-driven, your organisation would like to make its sales data accessible from one centralised location.
+2. Data Extraction
+The data_extraction.py file houses the DatabaseExtractor class, responsible for extracting data from diverse sources such as databases, PDF files, and JSON files. This component ensures comprehensive data retrieval for subsequent processing.
 
-Your first goal will be to produce a system that stores the current company data in a database so that it's accessed from one centralised location and acts as a single source of truth for sales data.
+3. Data Cleaning
+The data_cleaning.py file features the DatabaseCleaning class, which handles data cleaning tasks based on specific requirements. This component ensures data consistency and accuracy before integration into the centralized database.
 
-You will then query the database to get up-to-date metrics for the business.
+4. Project Execution
+The mrdc_project.ipynb file serves as the main project execution script, orchestrating the data extraction, cleaning, and transfer processes. This Jupyter Notebook integrates the aforementioned components to create a streamlined workflow for centralizing sales data.
 
-The 'data_utils.py' file contains the 'DatabaseConnector' class which connects to the given database, ready to extract the data. It also connects to a local database so the cleaned data can be exported there.
+5. Sales Data Queries
+This SQL file (sales_datat.session.sql) contains statements to adjust data types in the tables and set up foreign key constraints between the orders_table and related dimension tables. 
+The initial section of the SQL file focuses on adjusting data types in the orders_table and related dimension tables to ensure compatibility and consistency across the database schema. This involves altering column types and lengths based on data requirements and standards. 
+Following the data type adjustments, primary keys are added to the dimension tables (dim_users, dim_store_details, dim_dates_times, dim_card_details) to uniquely identify each record. Primary keys are essential for data indexing and maintaining data integrity within the database.
+Finally, foreign key constraints are established in the orders_table to reference the primary keys in the dimension tables. These constraints enforce referential integrity, ensuring that data in the orders_table accurately corresponds to records in the associated dimension tables.
 
-The 'data_extraction.py' file contains the 'DatabasExtractor' class which extracts data from the database, pdf files and json files ready for the data to be cleaned.
-
-The 'data_cleaning.py' file contains the 'DatabaseCleaning' class which cleans the data depending on its requirements. 
-
-The 'mrdc_project.ipynb' file imports the 3 previous files to extract, clean and transfer the data to a local database. The database is now ready to be queried to metrics fro the business.
-
-To implement running the project, git clone the repo and run the file in the terminal. Python is required:
-
-python milestone_5.py
-
-To run the project, credentials for where to extract data to and where to upload it once cleaned must be given in a yaml file. The project also needs to be connected to AWS and a bucket must be defined. You will also need the endpoint url or the json url. When extracting data from a pdf file, the link must be given. 
+Getting Started
+Clone the repository:
+bash
+git clone https://github.com/JenHolmes608/multinational-retail-data-centralisation246.git
+Navigate to the project directory:
+bash
+cd multinational-retail-data-centralisation246
+Ensure Python is installed.
+Install dependencies:
+bash
+pip install -r requirements.txt
+Set up the necessary credentials and configurations in a YAML file.
+Execute the project script:
+bash
+python mrdc_project.py
+Configuration
+Define credentials for data extraction and upload destinations in a YAML file.
+Ensure connectivity to AWS and define the appropriate S3 bucket.
+Provide the endpoint URL or JSON URL for data extraction.
+For PDF data extraction, include the relevant link to the PDF file.
+Contributing
+Contributions to this project are welcome! Please follow the standard guidelines for contributing.
