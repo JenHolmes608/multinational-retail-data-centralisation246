@@ -16,11 +16,14 @@ The data_cleaning.py file features the DatabaseCleaning class, which handles dat
 4. Project Execution
 The mrdc_project.ipynb file serves as the main project execution script, orchestrating the data extraction, cleaning, and transfer processes. This Jupyter Notebook integrates the aforementioned components to create a streamlined workflow for centralizing sales data.
 
-5. Sales Data Queries
-This SQL file (sales_datat.session.sql) contains statements to adjust data types in the tables and set up foreign key constraints between the orders_table and related dimension tables. 
+5. Creating Database Schema
+This SQL file (create_schema.sql) contains statements to adjust data types in the tables and set up foreign key constraints between the orders_table and related dimension tables. 
 The initial section of the SQL file focuses on adjusting data types in the orders_table and related dimension tables to ensure compatibility and consistency across the database schema. This involves altering column types and lengths based on data requirements and standards. 
 Following the data type adjustments, primary keys are added to the dimension tables (dim_users, dim_store_details, dim_dates_times, dim_card_details) to uniquely identify each record. Primary keys are essential for data indexing and maintaining data integrity within the database.
 Finally, foreign key constraints are established in the orders_table to reference the primary keys in the dimension tables. These constraints enforce referential integrity, ensuring that data in the orders_table accurately corresponds to records in the associated dimension tables.
+
+6. Querying the Data
+The query_data.sql file contains a collection of SQL queries designed to analyze sales data for the company. These queries cover various aspects of sales, including total sales by country, store type, and product, as well as metrics such as average time between sales. The queries are structured to provide insightful information to the sales team, operations team, and management for strategic decision-making.
 
 Getting Started
 Clone the repository:
